@@ -28,7 +28,7 @@ namespace Plugin.FilePicker.Abstractions
         /// <returns>
         /// File data object, or null when user cancelled picking file
         /// </returns>
-        Task<FileData> PickFile(string[] allowedTypes = null);
+        Task<FileData> PickFile(string[] allowedTypes = null, FileOptions fileOptions = null);
 
         /// <summary>
         /// Saves the file that was picked to external storage.

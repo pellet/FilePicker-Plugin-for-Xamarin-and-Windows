@@ -12,14 +12,19 @@ namespace Plugin.FilePicker
 {
     public class FilePickerImplementation : NSObject, IFilePicker
     {
-        public Task<FileData> PickFile(string[] allowedTypes)
+        public Task<FileData> PickFile(string[] allowedTypes, FileOptions fileOptions = null)
         {
+            if (fileOptions is null)
+            {
+                fileOptions = new FileOptions();
+            }
+            
             // for consistency with other platforms, only allow selecting of a single file.
             // would be nice if we passed a "file options" to override picking multiple files & directories
             var openPanel = new NSOpenPanel();
-            openPanel.CanChooseFiles = true;
-            openPanel.AllowsMultipleSelection = false;
-            openPanel.CanChooseDirectories = false;
+            openPanel.CanChooseFiles = fileOptions.CanChooseFiles;
+            openPanel.AllowsMultipleSelection = fileOptions.AllowsMultipleSelection;
+            openPanel.CanChooseDirectories = fileOptions.CanChooseDirectories;
 
             // macOS allows the file types to contain UTIs, filename extensions or a combination of the two.
             // If no types are specified, all files are selectable.
@@ -40,7 +45,18 @@ namespace Plugin.FilePicker
                 {
                     var path = url.Path;
                     var fileName = Path.GetFileName(path);
-                    data = new FileData(path, fileName, () => File.OpenRead(path));
+                    
+                    Func<Stream> streamGetter;
+                    if (Directory.Exists(path))
+                    {
+                        streamGetter = () => Stream.Null;
+                    }
+                    else
+                    {
+                        streamGetter = () => File.OpenRead(path);
+                    }
+                    
+                    data = new FileData(path, fileName, streamGetter);
                 }
             }
 

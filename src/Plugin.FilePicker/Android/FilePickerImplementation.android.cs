@@ -55,7 +55,7 @@ namespace Plugin.FilePicker
         /// <returns>
         /// File data object, or null when user cancelled picking file
         /// </returns>
-        public async Task<FileData> PickFile(string[] allowedTypes)
+        public async Task<FileData> PickFile(string[] allowedTypes, FileOptions fileOptions = null)
         {
             var fileData = await this.PickFileAsync(allowedTypes, Intent.ActionGetContent);
 

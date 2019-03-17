@@ -22,7 +22,7 @@ namespace Plugin.FilePicker
         /// corresponds how the Windows file open dialog specifies file types.
         /// </param>
         /// <returns>file data of picked file, or null when picking was cancelled</returns>
-        public Task<FileData> PickFile(string[] allowedTypes = null)
+        public Task<FileData> PickFile(string[] allowedTypes = null, FileOptions fileOptions = null)
         {
             Microsoft.Win32.OpenFileDialog picker = new Microsoft.Win32.OpenFileDialog();
             picker.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
